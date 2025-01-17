@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const Task = ({ task, onDeleteTask, onEditTask }) => {
+const Task = ({ task, onDeleteTask, onEditTask, onToggleTask }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [newDescription, setNewDescription] = useState(task.description);
 
@@ -12,11 +12,20 @@ const Task = ({ task, onDeleteTask, onEditTask }) => {
     setIsEditing(!isEditing);
   }
 
+  function handleToggleCheckbox() {
+    onToggleTask({ ...task, checked: !task.checked });
+  }
+
   return (
     <>
       <li className="todo stack-small">
         <div className="c-cb">
-          <input id="todo-0" type="checkbox" defaultChecked={task.checked} />
+          <input
+            id={`todo-${task.id}`}
+            type="checkbox"
+            checked={task.checked}
+            onChange={{ handleToggleCheckbox }}
+          />
           <label className="todo-label" htmlFor={`todo-${task.id}`}>
             {isEditing ? (
               <input

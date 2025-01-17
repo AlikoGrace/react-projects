@@ -1,7 +1,7 @@
 import React from "react";
 import Task from "./Task";
 
-const TaskList = ({ tasks, onDeleteTask, onEditTask }) => {
+const TaskList = ({ tasks, onDeleteTask, onEditTask, onToggleTask }) => {
   return (
     <div>
       <h2 id="list-heading">{tasks.length} tasks remaining</h2>
@@ -16,6 +16,7 @@ const TaskList = ({ tasks, onDeleteTask, onEditTask }) => {
             key={task.id}
             onDeleteTask={onDeleteTask}
             onEditTask={onEditTask}
+            onToggleTask={onToggleTask}
           />
         ))}
       </ul>

@@ -20,6 +20,13 @@ function App(props) {
       prevTasks.map((task) => (task.id === updatedTask.id ? updatedTask : task))
     );
   }
+
+  function handleToggleTask(updatedTask) {
+    setTasks((prevTasks) =>
+      prevTasks.map((task) => (task.id === updatedTask.id ? updatedTask : task))
+    );
+  }
+
   return (
     <div className="todoapp stack-large">
       <h1>TodoMatic</h1>
@@ -29,6 +36,7 @@ function App(props) {
         tasks={tasks}
         onDeleteTask={handleDeleteTask}
         onEditTask={handleEditTask}
+        onToggleTask={handleToggleTask}
       />
     </div>
   );
