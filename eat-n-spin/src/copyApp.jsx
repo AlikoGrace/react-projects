@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { Children, useState } from "react";
 
 const initialFriends = [
   {
@@ -30,57 +30,46 @@ function Button({ children, onClick }) {
 }
 
 export default function App() {
-  const [friends, setFriends] = useState(initialFriends);
-  const [showAddFriend, setShowAddFriend] = useState(false);
+  const [showAddFriend, setShowAddFriend] = useState(true);
+  const [friends, setAddFriend] = useState(initialFriends);
   const [selectedFriend, setSelectedFriend] = useState(null);
 
   function handleShowAddFriend() {
-    setShowAddFriend((show) => !show);
+    setShowAddFriend((showAddFriend) => !showAddFriend);
   }
 
-  function handleAddFriend(friend) {
-    setFriends((prevFriends) => [...prevFriends, friend]);
+  function handleAddFriend(newFriend) {
+    setAddFriend((friends) => [...friends, newFriend]);
   }
 
   function handleSelectedFriend(friend) {
     setSelectedFriend((current) => (current?.id === friend.id ? null : friend));
     setShowAddFriend(false);
   }
-
-  function handleSplitBill(value) {}
-
   return (
     <div className="app">
       <div className="sidebar">
-        <FriendList
-          friends={friends}
-          onSelection={handleSelectedFriend}
-          selectedFriend={selectedFriend}
-        />
+        <FriendList friends={friends} selectedFriend={selectedFriend} />
 
-        {showAddFriend && <FormAddFriend onhandleAddFriend={handleAddFriend} />}
+        {showAddFriend && <FormAddFriend onAddFriend={handleAddFriend} />}
         <Button onClick={handleShowAddFriend}>
-          {showAddFriend ? "close" : "Add friend"}
+          {showAddFriend ? "clsoe" : "add friend"}
         </Button>
       </div>
-      {selectedFriend && (
-        <FormSplitBill
-          selectedFriend={selectedFriend}
-          onSplitBill={handleSplitBill}
-        />
-      )}
+
+      <FormSplitBill />
     </div>
   );
 }
 
-function FriendList({ friends, onSelection, selectedFriend }) {
+function FriendList({ friends, selectedFriend }) {
+  //   const friends = initialFriends;
   return (
     <ul>
       {friends.map((friend) => (
         <Friend
           friend={friend}
           key={friend.id}
-          onSelection={onSelection}
           selectedFriend={selectedFriend}
         />
       ))}
@@ -88,27 +77,61 @@ function FriendList({ friends, onSelection, selectedFriend }) {
   );
 }
 
-function Friend({ friend, onSelection, selectedFriend }) {
+function Friend({ friend, selectedFriend }) {
   const isSelected = selectedFriend?.id === friend.id; // Use optional chaining here
   return (
     <li className={isSelected ? "selected" : ""}>
-      <img src={friend.image} alt="friend" />
+      <img src={friend.image} alt="" />
       <h3>{friend.name}</h3>
       {friend.balance < 0 && (
         <p className="red">
-          You owe {friend.name} {Math.abs(friend.balance)}
+          You owe {friend.name} {friend.balance}
         </p>
       )}
       {friend.balance > 0 && (
         <p className="green">
-          {friend.name} owes you {friend.balance}
+          {" "}
+          {friend.name}owes you {friend.balance}
         </p>
       )}
       {friend.balance == 0 && <p>You and {friend.name} are even</p>}
-      <Button onClick={() => onSelection(friend)}>
-        {isSelected ? "close" : "select "}
-      </Button>
+      <Button>select</Button>
+      {isSelected ? "close" : "select "}
     </li>
+  );
+}
+
+function FormAddFriend({ onAddFriend }) {
+  const [name, setName] = useState("");
+  const [image, setImage] = useState("https://i.pravatar.cc/48");
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    const id = crypto.randomUUID();
+    const newFriend = { name, id, image, balance: 0, image: `${image}?=${id}` };
+    onAddFriend(newFriend);
+    console.log(newFriend);
+
+    setImage("https://i.pravatar.cc/48");
+    setName("");
+  }
+
+  return (
+    <form action="" className="form-add-friend" onSubmit={handleSubmit}>
+      <label htmlFor="">🧑‍🤝‍🧑 name</label>
+      <input
+        type="text"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+      />
+      <label htmlFor="">🖼️ Image url</label>
+      <input
+        type="text"
+        value={image}
+        onChange={(e) => setImage(e.target.value)}
+      />
+      <Button>Add</Button>
+    </form>
   );
 }
 

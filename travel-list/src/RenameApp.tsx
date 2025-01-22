@@ -8,7 +8,7 @@ import "./App.css";
 // ];
 
 export default function App() {
-  const [Items, setItems] = useState([]);
+  const [items, setItems] = useState([]);
   function handleAddItems(item) {
     setItems((items) => [...items, item]);
   }
