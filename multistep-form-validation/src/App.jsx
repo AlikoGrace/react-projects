@@ -1,38 +1,35 @@
+import StepperControl from "./components/StepperControl"
+import Personal from "./components/steps/Personal"
+import Stepper from "./components/Stepper"
+import Contact from "./components/steps/Contact"
 
-import { useState } from "react";
-import Stepper from "./components/Stepper";
-import StepperControl from "./components/StepperControl";
-import Account from "./components/steps/Account";
-import Details from "./components/steps/Details";
-import Final from "./components/steps/Final";
+const steps=[
+  "Personal",
+  "contact",
+  "review",
+]
 
-const App = () => {
-  const[currentStep,setCurrentStep]=useState(1)
-
-  const steps=[
-    "Account information",
-    "Account Details",
-    "Complete"
-  ]
-
-  const displayStep=(step)=>{
-    switch(step){
-      case 1:
-      return <Account/>
+function displaySteps(steps){
+  switch(steps){
+    case 1:
+      return <Personal/>
       case 2:
-        return <Details/>
-        case 3:
-          return <Final/>
-    }
+      return <Contact/>
+      default:
   }
+}
+const App = () => {
   return (
-    <div className=" md:w-1/2 mx-auto shadow-xl rounded-2xl pb-2 bg-white">
-      <div className="container horizontal mt-5">
-        <Stepper steps={steps} currentStep={currentStep} />
+    <div className="md:w-1/2 mx-auto flex flex-col justify-center  space-x-4 items-center  bg-gray-100 h-screen">
+      <div className="container mt-5">
+      <Stepper />
       </div>
-      <StepperControl />
+      
+      {/* <Personal/> */}
+      <Contact/>
+      <StepperControl/>
     </div>
-  );
-};
+  )
+}
 
-export default App;
+export default App
