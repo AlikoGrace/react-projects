@@ -2,47 +2,77 @@ import { useState } from "react";
 import Input from "../Input";
 
 const Personal = ({ label, placeholder, type }) => {
-  const [firstName, setFirstName] = useState("");
-  const [surName, setSurName] = useState("");
-  const [otherName, setOtherName] = useState("");
+  const [state, setState] = useState({
+    firstName: "",
+    surName: " ",
+    otherName: "",
+    gender: "",
+  });
+
+  const handleChange = (e) => {
+    setState({
+      ...state,
+      [e.target.name]: e.target.value,
+    });
+  };
   return (
     <div
       className=" w-full mx-auto max-w-md border-1/2 p-6 rounded-lg shadow-lg
      ">
       <form action="" className="w-full">
         <Input
-          label="Full Name"
+          label="First Name"
           placeholder="first name"
           type="text"
-          value={firstName}
-          onChange={(e) => setFirstName(e)}
+          value={state.firstName}
+          name="firstName"
+          onChange={handleChange}
         />
         <Input
           label="Surname Name"
-          placeholder="first name"
+          placeholder="surname"
           type="text"
-          value={surName}
-          onChange={(e) => setSurName(e.target.value)}
+          name="surName"
+          value={state.surName}
+          onChange={handleChange}
         />
         <Input
           label="Other Name"
-          placeholder="first name"
+          placeholder="other names"
           type="text"
-          value={otherName}
-          onChange={(e) => setOtherName(e.target.value)}
+          name="otherName"
+          value={state.otherName}
+          onChange={handleChange}
         />
         <div className="mt-4 flex items-center justify-between w-full">
           <span className="font-medium">Gender</span>
           <label>
-            <input type="radio" name="gender" className="form-radio" />
+            <input
+              type="radio"
+              name="gender"
+              value="Male"
+              onChange={handleChange}
+              checked={state.gender == "Male"}
+              className="form-radio"
+            />
             <span>Male</span>
           </label>
           <label>
-            <input type="radio" name="gender" />
+            <input
+              type="radio"
+              name="gender"
+              value="Female"
+              onChange={handleChange}
+              checked={state.gender == "Female"}
+            />
             <span>Female</span>
           </label>
         </div>
       </form>
+      {/* <p className="mt-4">
+        Full Name: {state.firstName} {state.surName} {state.otherName}
+        {state.gender}
+      </p> */}
     </div>
   );
 };
