@@ -7,11 +7,15 @@ import { useEffect } from "react";
 const schema = yup.object().shape({
   contact: yup.string().required(),
   email: yup.string().email().required(),
-  password: yup.string().min(6).max(20).required(),
+  password: yup
+    .string()
+    .min(6, "Passwird must be at least 6 characters")
+    .max(20)
+    .required("Please enter a password"),
   confirmPassword: yup
     .string()
-    .oneOf([yup.ref("password"), null])
-    .required(),
+    .oneOf([yup.ref("password"), null], "Passwords do not match")
+    .required("Please confirm password"),
 });
 
 const Contact = ({ setValidationTrigger }) => {
