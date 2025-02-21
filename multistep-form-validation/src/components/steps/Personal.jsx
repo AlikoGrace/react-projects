@@ -28,11 +28,6 @@ const Personal = ({ setValidationTrigger, setCurrentStep }) => {
     setValidationTrigger(() => trigger);
   }, [trigger, setValidationTrigger]);
 
-  const onSubmit = (data) => {
-    console.log("Form Data:", data);
-    setCurrentStep((prevStep) => prevStep + 1);
-  };
-
   return (
     <div
       className=" w-full mx-auto max-w-md border-1/2 p-6 rounded-lg shadow-lg

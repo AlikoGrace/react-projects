@@ -17,6 +17,7 @@ const App = () => {
 
   const [validationTrigger, setValidationTrigger] = useState(
     () => async () => true
+    // if trigger hasn't been set yet then this will make sure the app doesn't break
   );
 
   function displaySteps(steps) {

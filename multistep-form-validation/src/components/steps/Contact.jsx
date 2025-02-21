@@ -2,6 +2,7 @@ import Input from "../Input";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import { useEffect } from "react";
 
 const schema = yup.object().shape({
   contact: yup.string().required(),
@@ -9,18 +10,22 @@ const schema = yup.object().shape({
   password: yup.string().min(6).max(20).required(),
   confirmPassword: yup
     .string()
-    .oneOf([yup.ref("password")])
+    .oneOf([yup.ref("password"), null])
     .required(),
 });
 
-const Contact = () => {
+const Contact = ({ setValidationTrigger }) => {
   const {
     register,
-    handleSubmit,
+    trigger,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
   });
+
+  useEffect(() => {
+    setValidationTrigger(() => trigger);
+  }, [trigger, setValidationTrigger]);
   return (
     <div
       className=" w-full max-w-md mx-auto border-1/2 p-6 rounded-lg shadow-lg
