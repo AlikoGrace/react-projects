@@ -6,18 +6,6 @@ import { useEffect, useState } from "react";
 
 const steps = ["Personal", "contact", "review"];
 
-function displaySteps(steps) {
-  switch (steps) {
-    case 1:
-      return <Personal />;
-    case 2:
-      return <Contact />;
-    case 3:
-      return <div>Review Step</div>;
-    default:
-      <Personal />;
-  }
-}
 const App = () => {
   const [currentStep, setCurrentStep] = useState(() => {
     const savedStep = localStorage.getItem("currentStep");
@@ -26,6 +14,23 @@ const App = () => {
     // check if localStorage has a savedStep return
     // it in a parse form of json if not return 1 (the fisrt step)
   });
+
+  const [validationTrigger, setValidationTrigger] = useState(
+    () => async () => true
+  );
+
+  function displaySteps(steps) {
+    switch (steps) {
+      case 1:
+        return <Personal setValidationTrigger={setValidationTrigger} />;
+      case 2:
+        return <Contact setValidationTrigger={setValidationTrigger} />;
+      case 3:
+        return <div>Review Step</div>;
+      default:
+        <Personal currentStep={currentStep} setCurrentStep={setCurrentStep} />;
+    }
+  }
 
   useEffect(() => {
     localStorage.setItem("currentStep", JSON.stringify(currentStep));
@@ -40,6 +45,7 @@ const App = () => {
         currentStep={currentStep}
         setCurrentStep={setCurrentStep}
         steps={steps}
+        validationTrigger={validationTrigger}
       />
     </div>
   );
