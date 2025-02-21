@@ -3,6 +3,7 @@ import Personal from "./components/steps/Personal";
 import Stepper from "./components/Stepper";
 import Contact from "./components/steps/Contact";
 import { useEffect, useState } from "react";
+import Review from "./components/steps/Review";
 
 const steps = ["Personal", "contact", "review"];
 
@@ -15,6 +16,11 @@ const App = () => {
     // it in a parse form of json if not return 1 (the fisrt step)
   });
 
+  const [formData, setFormData] = useState(() => {
+    const savedData = localStorage.getItem("formData");
+    return savedData ? JSON.parse(savedData) : {};
+  });
+
   const [validationTrigger, setValidationTrigger] = useState(
     () => async () => true
     // if trigger hasn't been set yet then this will make sure the app doesn't break
@@ -23,19 +29,37 @@ const App = () => {
   function displaySteps(steps) {
     switch (steps) {
       case 1:
-        return <Personal setValidationTrigger={setValidationTrigger} />;
+        return (
+          <Personal
+            setValidationTrigger={setValidationTrigger}
+            setFormData={setFormData}
+            formData={formData}
+          />
+        );
       case 2:
-        return <Contact setValidationTrigger={setValidationTrigger} />;
+        return (
+          <Contact
+            setValidationTrigger={setValidationTrigger}
+            formData={formData}
+            setFormData={setFormData}
+          />
+        );
       case 3:
-        return <div>Review Step</div>;
+        return <Review formData={formData} />;
       default:
-        <Personal currentStep={currentStep} setCurrentStep={setCurrentStep} />;
+        <Personal
+          currentStep={currentStep}
+          setCurrentStep={setCurrentStep}
+          setFormData={setCurrentStep}
+          formData={formData}
+        />;
     }
   }
 
   useEffect(() => {
     localStorage.setItem("currentStep", JSON.stringify(currentStep));
-  }, [currentStep]);
+    localStorage.setItem("formData", JSON.stringify(formData));
+  }, [currentStep, formData]);
   return (
     <div className="md:w-1/2 mx-auto shadow-xl rounded 2xl pb-2 bg-white">
       <div className=" container horizontal mt-5">

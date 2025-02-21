@@ -12,17 +12,36 @@ const schema = yup.object().shape({
   gender: yup.string().required("Please select a gender"),
 });
 
-const Personal = ({ setValidationTrigger, setCurrentStep }) => {
+const Personal = ({
+  setValidationTrigger,
+  setCurrentStep,
+  formData,
+  setFormData,
+}) => {
   const {
     register,
     trigger,
+    setValue,
     // to manually trigger validation
-    formState: { errors, isValid },
+    formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
     mode: "onChange",
     // validation triggers on change
   });
+
+  useEffect(() => {
+    Object.keys(formData).forEach((key) => {
+      setValue(key, formData[key]);
+    });
+  }, [formData, setValue]);
+
+  const handleInputChange = (e) => {
+    setFormData((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
+  };
 
   useEffect(() => {
     setValidationTrigger(() => trigger);
@@ -38,6 +57,7 @@ const Personal = ({ setValidationTrigger, setCurrentStep }) => {
           placeholder="first name"
           type="text"
           {...register("firstName")}
+          onChange={handleInputChange}
         />
         {errors.firstName && (
           <p className="text-red-500 text-sm">{errors.firstName.message}</p>
@@ -46,6 +66,7 @@ const Personal = ({ setValidationTrigger, setCurrentStep }) => {
           label="Surname Name"
           placeholder="sur names"
           {...register("surName")}
+          onChange={handleInputChange}
         />
         {errors.surName && (
           <p className="text-red-500 text-sm">{errors.surName.message}</p>
@@ -56,6 +77,7 @@ const Personal = ({ setValidationTrigger, setCurrentStep }) => {
           placeholder="other names"
           type="text"
           {...register("otherName")}
+          onChange={handleInputChange}
         />
         <div className="mt-4 flex items-center justify-between w-full">
           <span className="font-medium">Gender</span>
@@ -65,11 +87,17 @@ const Personal = ({ setValidationTrigger, setCurrentStep }) => {
               value="Male"
               className="form-radio"
               {...register("gender")}
+              onChange={handleInputChange}
             />
             <span>Male</span>
           </label>
           <label>
-            <input type="radio" value="Female" {...register("gender")} />
+            <input
+              type="radio"
+              value="Female"
+              {...register("gender")}
+              onChange={handleInputChange}
+            />
             <span>Female</span>
           </label>
         </div>
