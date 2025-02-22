@@ -19,13 +19,14 @@ const Review = ({ formData }) => {
         <strong>Email:</strong> {formData.email}
       </div>
       <div className="mb-2">
-        <strong>Phone:</strong> {formData.phone}
+        <strong>Phone:</strong> {formData.contact}
       </div>
 
       {/* Submit Button */}
       <button
         onClick={() => alert("Form submitted successfully!")}
-        className="w-full mt-4 py-2 px-4 bg-green-700 text-white rounded-xl font-semibold cursor-pointer border-2 hover:bg-green-800 transition duration-200 ease-in-out">
+        className="w-full mt-4 py-2 px-4 bg-green-700 text-white rounded-xl font-semibold cursor-pointer border-2
+         hover:bg-green-800 transition duration-200 ease-in-out">
         Submit
       </button>
     </div>

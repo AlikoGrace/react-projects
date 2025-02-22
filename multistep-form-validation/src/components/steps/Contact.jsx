@@ -18,14 +18,32 @@ const schema = yup.object().shape({
     .required("Please confirm password"),
 });
 
-const Contact = ({ setValidationTrigger }) => {
+const Contact = ({ setValidationTrigger, formData, setFormData }) => {
   const {
     register,
     trigger,
+    setValue,
+    // setValue allow you manually updat a fields value
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
   });
+
+  // to prefilled inputs with saved data in local storage
+
+  useEffect(() => {
+    Object.keys(formData).forEach((key) => {
+      setValue(key, formData[key]);
+    });
+  }, [formData, setValue]);
+
+  // update formData stae when input changes
+  const handleInputChange = (e) => {
+    setFormData((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
+  };
 
   useEffect(() => {
     setValidationTrigger(() => trigger);
@@ -40,6 +58,7 @@ const Contact = ({ setValidationTrigger }) => {
           placeholder="+1234567890"
           type="tel"
           {...register("contact")}
+          onChange={handleInputChange}
         />
         {errors.contact && (
           <p className="text-red-500 text-sm">{errors.contact.message}</p>
@@ -49,6 +68,7 @@ const Contact = ({ setValidationTrigger }) => {
           placeholder="example@mail.com"
           type="email"
           {...register("email")}
+          onChange={handleInputChange}
         />
         {errors.email && (
           <p className="text-red-500 text-sm">{errors.email.message}</p>
@@ -58,6 +78,7 @@ const Contact = ({ setValidationTrigger }) => {
           placeholder="password"
           type="password"
           {...register("password")}
+          onChange={handleInputChange}
         />
         {errors.password && (
           <p className="text-red-500 text-sm">{errors.password.message}</p>
@@ -68,6 +89,7 @@ const Contact = ({ setValidationTrigger }) => {
           placeholder="confirm password"
           type="password"
           {...register("confirmPassword")}
+          onChange={handleInputChange}
         />
         {errors.confirmPassword && (
           <p className="text-red-500 text-sm">

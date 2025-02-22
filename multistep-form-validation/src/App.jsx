@@ -26,6 +26,11 @@ const App = () => {
     // if trigger hasn't been set yet then this will make sure the app doesn't break
   );
 
+  useEffect(() => {
+    localStorage.setItem("currentStep", JSON.stringify(currentStep));
+    localStorage.setItem("formData", JSON.stringify(formData));
+  }, [currentStep, formData]);
+
   function displaySteps(steps) {
     switch (steps) {
       case 1:
@@ -56,12 +61,8 @@ const App = () => {
     }
   }
 
-  useEffect(() => {
-    localStorage.setItem("currentStep", JSON.stringify(currentStep));
-    localStorage.setItem("formData", JSON.stringify(formData));
-  }, [currentStep, formData]);
   return (
-    <div className="md:w-1/2 mx-auto shadow-xl rounded 2xl pb-2 bg-white">
+    <div className="md:w-1/2 mx-auto min-h-screen justify-center shadow-xl rounded 2xl pb-2 bg-white flex flex-col items-center">
       <div className=" container horizontal mt-5">
         <Stepper steps={steps} currentStep={currentStep} />
       </div>
