@@ -3,6 +3,8 @@ import Header from "./components/Header";
 import Main from "./components/Main";
 import Loader from "./components/Loader";
 import Error from "./components/Error";
+import StartScreeen from "./components/StartScreeen";
+import Question from "./components/Question";
 
 const initialState = {
   questions: [],
@@ -23,6 +25,11 @@ function reducer(state, action) {
         ...state,
         status: "error",
       };
+    case "start":
+      return {
+        ...state,
+        status: "active",
+      };
 
     default:
       throw new Error("Action unkown");
@@ -31,7 +38,8 @@ function reducer(state, action) {
 
 const App = () => {
   // const [state, dispatch] = useReducer(reducer, initialState); i want to distructure state
-  const [{ question, status }, dispatch] = useReducer(reducer, initialState);
+  const [{ questions, status }, dispatch] = useReducer(reducer, initialState);
+  const numQuestions = questions.length;
   useEffect(() => {
     fetch("http://localhost:9000/questions")
       .then((res) => res.json())
@@ -44,6 +52,10 @@ const App = () => {
       <Main>
         {status === "loading" && <Loader />}
         {status === "error" && <Error />}
+        {status === "ready" && (
+          <StartScreeen numQuestions={numQuestions} dispatch={dispatch} />
+        )}
+        {status === "active" && <Question />}
       </Main>
     </div>
   );
