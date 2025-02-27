@@ -10,6 +10,7 @@ const initialState = {
   questions: [],
   //  "loading", "active","error", "active","finished"
   status: "loading",
+  index: 0,
 };
 function reducer(state, action) {
   switch (action.type) {
@@ -30,6 +31,11 @@ function reducer(state, action) {
         ...state,
         status: "active",
       };
+    case "newAnswer":
+      return {
+        ...state,
+        answer: action.payload,
+      };
 
     default:
       throw new Error("Action unkown");
@@ -38,7 +44,10 @@ function reducer(state, action) {
 
 const App = () => {
   // const [state, dispatch] = useReducer(reducer, initialState); i want to distructure state
-  const [{ questions, status }, dispatch] = useReducer(reducer, initialState);
+  const [{ questions, status, index, answer }, dispatch] = useReducer(
+    reducer,
+    initialState
+  );
   const numQuestions = questions.length;
   useEffect(() => {
     fetch("http://localhost:9000/questions")
@@ -55,7 +64,13 @@ const App = () => {
         {status === "ready" && (
           <StartScreeen numQuestions={numQuestions} dispatch={dispatch} />
         )}
-        {status === "active" && <Question />}
+        {status === "active" && (
+          <Question
+            question={questions[index]}
+            dispatch={dispatch}
+            answer={answer}
+          />
+        )}
       </Main>
     </div>
   );
