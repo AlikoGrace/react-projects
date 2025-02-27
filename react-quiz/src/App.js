@@ -11,6 +11,7 @@ const initialState = {
   //  "loading", "active","error", "active","finished"
   status: "loading",
   index: 0,
+  answer: null,
 };
 function reducer(state, action) {
   switch (action.type) {
