@@ -5,6 +5,8 @@ import Loader from "./components/Loader";
 import Error from "./components/Error";
 import StartScreeen from "./components/StartScreeen";
 import Question from "./components/Question";
+import NextButton from "./components/NextButton";
+import Progress from "./components/Progress";
 
 const initialState = {
   questions: [],
@@ -12,10 +14,11 @@ const initialState = {
   status: "loading",
   index: 0,
   answer: null,
+  points: 0,
 };
 function reducer(state, action) {
   switch (action.type) {
-    case "dataRecieved":
+    case "dataReceived":
       return {
         ...state,
         questions: action.payload,
@@ -33,9 +36,20 @@ function reducer(state, action) {
         status: "active",
       };
     case "newAnswer":
+      const question = state.questions.at(state.index);
       return {
         ...state,
         answer: action.payload,
+        points:
+          action.payload === question.correctOption
+            ? state.points + question.points
+            : state.points,
+      };
+    case "nextQuestion":
+      return {
+        ...state,
+        index: state.index + 1,
+        answer: null,
       };
 
     default:
@@ -45,7 +59,7 @@ function reducer(state, action) {
 
 const App = () => {
   // const [state, dispatch] = useReducer(reducer, initialState); i want to distructure state
-  const [{ questions, status, index, answer }, dispatch] = useReducer(
+  const [{ questions, status, index, answer, points }, dispatch] = useReducer(
     reducer,
     initialState
   );
@@ -53,7 +67,7 @@ const App = () => {
   useEffect(() => {
     fetch("http://localhost:9000/questions")
       .then((res) => res.json())
-      .then((data) => dispatch({ type: "dataRecieved", payload: data }))
+      .then((data) => dispatch({ type: "dataReceived", payload: data }))
       .catch((err) => dispatch({ type: "dataFailed" }));
   }, []);
   return (
@@ -66,11 +80,20 @@ const App = () => {
           <StartScreeen numQuestions={numQuestions} dispatch={dispatch} />
         )}
         {status === "active" && (
-          <Question
-            question={questions[index]}
-            dispatch={dispatch}
-            answer={answer}
-          />
+          <>
+            <Progress
+              index={index}
+              numQuestions={numQuestions}
+              points={points}
+            />
+            <Question
+              question={questions[index]}
+              dispatch={dispatch}
+              answer={answer}
+            />
+
+            <NextButton dispatch={dispatch} answer={answer} />
+          </>
         )}
       </Main>
     </div>
