@@ -126,6 +126,7 @@ const App = () => {
             points={points}
             maxPossiblePoints={maxPossiblePoints}
             highscore={highScore}
+            dispatch={dispatch}
           />
         )}
       </Main>
