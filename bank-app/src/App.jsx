@@ -1,5 +1,3 @@
-import { useReducer } from "react";
-
 /*
 INSTRUCTIONS / CONSIDERATIONS:
 
@@ -18,6 +16,8 @@ INSTRUCTIONS / CONSIDERATIONS:
 7. Customer can only close an account if there is no loan, AND if the balance is zero. If this condition is not met, just return the state. If the condition is met, the account is deactivated and all money is withdrawn. The account basically gets back to the initial state
 */
 
+import { act, useReducer } from "react";
+
 const initialState = {
   balance: 0,
   loan: 0,
@@ -26,7 +26,6 @@ const initialState = {
 
 function reducer(state, action) {
   if (!state.isActive && action.type !== "openAccount") return state;
-
   switch (action.type) {
     case "openAccount":
       return {
@@ -34,10 +33,19 @@ function reducer(state, action) {
         balance: 500,
         isActive: true,
       };
+
     case "deposit":
-      return { ...state, balance: state.balance + action.payload };
+      return {
+        ...state,
+        balance: state.balance + action.payload,
+      };
+
     case "withdraw":
-      return { ...state, balance: state.balance - action.payload };
+      return {
+        ...state,
+        balance: state.balance - action.payload,
+      };
+
     case "requestLoan":
       if (state.loan > 0) return state;
       return {
@@ -45,13 +53,21 @@ function reducer(state, action) {
         loan: action.payload,
         balance: state.balance + action.payload,
       };
+
     case "payLoan":
-      return { ...state, loan: 0, balance: state.balance - state.loan };
+      if (state.loan == 0) return state;
+      return {
+        ...state,
+        loan: state.loan - action.payload,
+        balance: state.balance - action.payload,
+      };
+
     case "closeAccount":
       if (state.loan > 0 || state.balance !== 0) return state;
       return initialState;
+
     default:
-      throw new Error("Unkown");
+      throw new Error("UNknown");
   }
 }
 
@@ -97,7 +113,7 @@ export default function App() {
       </p>
       <p>
         <button
-          onClick={() => dispatch({ type: "payLoan" })}
+          onClick={() => dispatch({ type: "payLoan", payload: 5000 })}
           disabled={!isActive}>
           Pay loan
         </button>
