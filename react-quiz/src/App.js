@@ -19,7 +19,9 @@ const App = () => {
     </QuizProvider>
   );
 };
-// i needed the satus state but useQuiz cannot be directly used in our app so i had to create a new function ue it there then call it in app
+// i needed the satus state but useQuiz cannot be directly used in our app
+//  so i had to create a new function ue it there then call it in app
+//whatever you are using must be wrapped in quiz provider but app can't be wrapped in that hence the Quizcontent created
 const QuizContent = () => {
   const { status } = useQuiz();
   return (
