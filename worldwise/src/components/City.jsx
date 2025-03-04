@@ -1,3 +1,4 @@
+import BackButton from "./BackButton";
 import styles from "./City.module.css";
 
 const formatDate = (date) =>
@@ -45,14 +46,13 @@ function City() {
         <a
           href={`https://en.wikipedia.org/wiki/${cityName}`}
           target="_blank"
-          rel="noreferrer"
-        >
+          rel="noreferrer">
           Check out {cityName} on Wikipedia &rarr;
         </a>
       </div>
 
       <div>
-        <ButtonBack />
+        <BackButton />
       </div>
     </div>
   );
