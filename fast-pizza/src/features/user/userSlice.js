@@ -4,7 +4,7 @@
 //   });
 // }
 
-const { createSlice } = require("@reduxjs/toolkit");
+import { createSlice } from "@reduxjs/toolkit";
 
 // async function fetchAddress() {
 //   // 1) We get the user's geolocation position
@@ -23,7 +23,7 @@ const { createSlice } = require("@reduxjs/toolkit");
 // }
 
 const initialState = {
-  username: "",
+  username: "Aliko",
 };
 
 const userSlice = createSlice({
