@@ -4,7 +4,7 @@ import { formatCurrency } from "../../utils/helpers";
 import { addItem } from "../cart/CartSlice";
 
 function MenuItem({ pizza }) {
-  const dispatch = useDispatch;
+  const dispatch = useDispatch();
   const { id, name, unitPrice, ingredients, soldOut, imageUrl } = pizza;
 
   function handleAddTOCart() {
@@ -38,7 +38,7 @@ function MenuItem({ pizza }) {
             </p>
           )}
 
-          {soldOut && (
+          {!soldOut && (
             <Button type="small" onClick={handleAddTOCart}>
               Add to cart
             </Button>
